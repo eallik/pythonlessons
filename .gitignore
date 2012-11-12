@@ -1,0 +1,4 @@
+*.pyc
+.ropeproject
+sender/somedir
+sender/done
