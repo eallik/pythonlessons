@@ -13,32 +13,33 @@ DEFAULT_PORT = 19000
 
 
 def send(filename, ip=DEFAULT_IP, port=DEFAULT_PORT):
-    print "Sending file %s to %s:%d" % (filename, ip, port)
-
     while True:
-        try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.connect((ip, port))
-        except socket.error as e:
-            if e.errno == ERRNO_SOCKET_CONNECTION_REFUSED:
-                sock.close()
-                time.sleep(2.0)
-                print "Retrying..."
-            else:
-                raise
-        else:
-            print "Connected..."
-            break
+        print "Sending file %s to %s:%d" % (filename, ip, port)
 
-    try:
-        time.sleep(0.5)
-        print "Sending file..."
-        with open(filename) as f:
-            sock.send(f.read())
-    finally:
-        print "File sent."
-        time.sleep(1.0)
-        sock.close()
+        while True:
+            try:
+                sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                sock.connect((ip, port))
+            except socket.error as e:
+                if e.errno == ERRNO_SOCKET_CONNECTION_REFUSED:
+                    sock.close()
+                    time.sleep(2.0)
+                    print "Retrying..."
+                else:
+                    raise
+            else:
+                print "Connected..."
+                break
+
+        try:
+            # time.sleep(0.5)
+            print "Sending file..."
+            with open(filename) as f:
+                sock.send(f.read())
+        finally:
+            print "File sent."
+            # time.sleep(1.0)
+            sock.close()
 
 
 def receive(ip=DEFAULT_IP, port=DEFAULT_PORT):
@@ -53,7 +54,7 @@ def receive(ip=DEFAULT_IP, port=DEFAULT_PORT):
         while True:
             conn, addr = sock.accept()
             print "Accepted connection: %r from %r" % (conn, addr)
-            time.sleep(0.5)
+            # time.sleep(0.5)
             num_bytes_received = 0
             while True:
                 data = conn.recv(1024)
